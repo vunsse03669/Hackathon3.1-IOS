@@ -205,10 +205,10 @@
 		46E5C00C1CF9A796002A7887 /* Techkid_Chess */ = {
 			isa = PBXGroup;
 			children = (
-				99BC91951D03D2EB00E56FC5 /* ChineseChess */,
-				46E5C0241CF9A7AD002A7887 /* SocketIO */,
 				46E5C0101CF9A796002A7887 /* AppDelegate.h */,
 				46E5C0111CF9A796002A7887 /* AppDelegate.m */,
+				99BC91951D03D2EB00E56FC5 /* ChineseChess */,
+				46E5C0241CF9A7AD002A7887 /* SocketIO */,
 				46E5C0191CF9A796002A7887 /* Assets.xcassets */,
 				46E5C01B1CF9A796002A7887 /* LaunchScreen.storyboard */,
 				99BC919B1D03D4D800E56FC5 /* Main.storyboard */,
@@ -452,7 +452,7 @@
 				TargetAttributes = {
 					46E5C0091CF9A796002A7887 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 2QXC9R6MR6;
+						DevelopmentTeam = 56YJ3N6KSG;
 					};
 				};
 			};

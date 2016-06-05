@@ -12,10 +12,14 @@
 #import "Map.h"
 #import "BoardConfig.h"
 #import "King.h"
+#import "ChatRoomViewController.h"
+#import "Utils.h"
 
 
+@interface ViewController () <ChatRoomViewControllerDelegate>
 
-@interface ViewController ()
+@property ChatRoomViewController *socketRoom;
+@property int messageIdx;
 
 @end
 
@@ -26,6 +30,24 @@
     [GameObject shareInstance:self.vBoard];
     self.arrBoard = [[NSMutableArray alloc]init];
     [self initBoard];
+    
+    //init socket
+    self.socketRoom = [[ChatRoomViewController alloc] initWithUserName:@"1" room:@"co_tuong_01"];
+    [self.socketRoom startSocket];
+    self.socketRoom.delegate = self;
+    [self sendMessage:@"Ahihi123"];
+    self.messageIdx = 0;
+ 
+}
+
+- (void) sendMessage:(NSString *)message
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (self.socketRoom.roomReady) {
+            [self.socketRoom.socket emit:@"message" withItems:@[message, self.socketRoom.roomName, self.socketRoom.userName]];
+        }
+        [self sendMessage:[NSString stringWithFormat:@"message %d", self.messageIdx++]];
+    });
 }
 
 
@@ -202,6 +224,19 @@
     else if(buttonIndex == 1) {
         NSLog(@"index = 1");
     }
+}
+
+
+- (void) handleMessage:(NSDictionary *)val;
+{
+    NSLog(@"ANOTHER USER SEND YOU MESSAGE %@", val);
+    NSDictionary *dictValue = [Utils dictByJSONString:val[@"message"]];
+    int rowValue = [dictValue[@"rowValue"] intValue];
+    int columValue = [dictValue[@"columValue"] intValue];
+  
+    //NSLog(@"row: %d - column: %d",rowValue,columValue);
+    
+    
 }
 
 
