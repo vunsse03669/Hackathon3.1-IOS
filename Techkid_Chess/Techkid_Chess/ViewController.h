@@ -15,5 +15,6 @@
 @property GameObject *game;
 @property NSMutableArray *arrBoard;
 
+@property NSString *username;
 @end
 

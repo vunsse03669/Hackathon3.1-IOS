@@ -120,6 +120,7 @@
                     <navigationItem key="navigationItem" id="1t8-fA-wog"/>
                     <connections>
                         <outlet property="btnLogin" destination="sMb-YA-Yd4" id="58v-xC-ZWP"/>
+                        <outlet property="txtUsername" destination="aLW-a6-Kg2" id="h5p-cR-eBw"/>
                         <segue destination="BYZ-38-t0r" kind="modal" identifier="mainVc" id="N37-jP-FqM"/>
                     </connections>
                 </viewController>
@@ -130,7 +131,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
