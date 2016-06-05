@@ -266,9 +266,9 @@
     NSInteger oldRow = [dictValue[@"oldRow"] intValue];
     NSInteger oldColumn = [dictValue[@"oldColumn"] intValue];
     
-    NSLog(@"Row: %ld - Col: %ld",rowValue,columValue);
+    NSLog(@"Row: %ld - Col: %ld", rowValue, columValue);
     
-    if([self getPieceAtCell:oldRow :oldColumn] != nil && [self getCell:rowValue :columValue] != nil ) {
+    if([self getPieceAtCell:oldRow :oldColumn] != nil) {
         [UIView animateWithDuration:1.0f animations:^{
             [self getPieceAtCell:oldRow :oldColumn].center = [self getCell:rowValue :columValue].center;
         } completion:^(BOOL finished) {
