@@ -88,8 +88,7 @@
         
         __block NSInteger oldRow = 0;
         __block NSInteger oldColumn = 0;
-        __block NSInteger rowValue = 0;
-        __block NSInteger columnValue = 0;
+        
         for(Piece *subview in self.vBoard.subviews){
             if([subview isKindOfClass:[Piece class]] && ((Piece *)subview).canMove) {
                 [UIView animateWithDuration:1.0f animations:^{
@@ -98,11 +97,12 @@
                     subview.center = cell.center;
                     [((Piece *)subview) moveToRow:cell.row Column:cell.column];
                 } completion:^(BOOL finished) {
-                    rowValue = cell.row;
-                    columnValue = cell.column;
+                    NSInteger rowValue = cell.row;
+                    NSInteger columnValue = cell.column;
 
                     NSDictionary *dictData = @{@"rowValue": @(rowValue),    @"columnValue": @(columnValue),
                                                @"oldRow": @(oldRow),    @"oldColumn": @(oldColumn)};
+
                     NSString *strData = [Utils stringJSONByDictionary:dictData];
                     
                     [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
@@ -143,7 +143,8 @@
             NSInteger rowValue = [self getPieceCanMove].row;
             NSInteger columnValue = [self getPieceCanMove].column;
             
-            NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columnValue": @(columnValue),
+
+            NSDictionary *dictData = @{@"rowValue": @(rowValue),@"columnValue": @(columnValue),
                                        @"oldRow": @(oldRow),@"oldColumn": @(oldColumn)};
             NSString *strData = [Utils stringJSONByDictionary:dictData];
             
@@ -264,24 +265,26 @@
     NSLog(@"ANOTHER USER SEND YOU MESSAGE %@", val);
     NSDictionary *dictValue = [Utils dictByJSONString:val[@"message"]];
     NSInteger rowValue = [dictValue[@"rowValue"] intValue];
-    NSInteger columValue = [dictValue[@"columValue"] intValue];
+    NSInteger columVal = [dictValue[@"columnValue"] intValue];
     NSInteger oldRow = [dictValue[@"oldRow"] intValue];
     NSInteger oldColumn = [dictValue[@"oldColumn"] intValue];
     
-    NSLog(@"Row: %ld - Col: %ld", rowValue, columValue);
+
+    NSLog(@"Row: %ld - Col: %ld",rowValue,columVal);
     
-    if([self getPieceAtCell:oldRow :oldColumn] != nil) {
+    //if([self getPieceAtCell:oldRow :oldColumn] != nil && [self getCell:rowValue :columValue] != nil ) {
         [UIView animateWithDuration:1.0f animations:^{
-            [self getPieceAtCell:oldRow :oldColumn].center = [self getCell:rowValue :columValue].center;
+            [self getPieceAtCell:oldRow :oldColumn].center = [self getCell:rowValue :columVal].center;
         } completion:^(BOOL finished) {
             
         }];
-    }
+    //}
 }
 
 - (Piece *) getPieceAtCell:(NSInteger)row :(NSInteger)column {
     for(Piece *piece in self.vBoard.subviews) {
-        if([piece isKindOfClass:[Piece class]]  && piece.row == row && piece.column == column) {
+
+        if([piece isKindOfClass:[Piece class]] && piece.row == row && piece.column == column) {
             return piece;
         }
     }
