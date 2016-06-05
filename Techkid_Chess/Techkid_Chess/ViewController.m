@@ -47,7 +47,7 @@
         if (self.socketRoom.roomReady) {
             [self.socketRoom.socket emit:@"message" withItems:@[message, self.socketRoom.roomName, self.socketRoom.userName]];
         }
-        //[self sendMessage:[NSString stringWithFormat:@"message %d", self.messageIdx++]];
+        [self sendMessage:[NSString stringWithFormat:@"message %d", self.messageIdx++]];
     });
 }
 
@@ -96,11 +96,11 @@
                     subview.center = cell.center;
                     [((Piece *)subview) moveToRow:cell.row Column:cell.column];
                 } completion:^(BOOL finished) {
-                    NSInteger rowValue = cell.row;
-                    NSInteger columnValue = cell.column;
+                    NSInteger rowValue = 4;
+                    NSInteger columnValue = 4;
 
-                    NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columValue": @(columnValue),
-                                               @"oldRow": @(oldRow),@"oldColumn": @(oldColumn)};
+                    NSDictionary *dictData = @{@"rowValue": @(rowValue),    @"columValue": @(columnValue),
+                                               @"oldRow": @(oldRow),    @"oldColumn": @(oldColumn)};
                     NSString *strData = [Utils stringJSONByDictionary:dictData];
                     
                     [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
@@ -263,6 +263,7 @@
     if([self getPieceAtCell:oldRow :oldColumn] != nil) {
         [UIView animateWithDuration:1.0f animations:^{
             [self getPieceAtCell:oldRow :oldColumn].center = [self getPieceAtCell:rowValue :columValue].center;
+            
         } completion:^(BOOL finished) {
             
         }];
