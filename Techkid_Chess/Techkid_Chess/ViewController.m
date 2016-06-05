@@ -88,6 +88,8 @@
         
         __block NSInteger oldRow = 0;
         __block NSInteger oldColumn = 0;
+        __block NSInteger rowValue = 0;
+        __block NSInteger columnValue = 0;
         for(Piece *subview in self.vBoard.subviews){
             if([subview isKindOfClass:[Piece class]] && ((Piece *)subview).canMove) {
                 [UIView animateWithDuration:1.0f animations:^{
@@ -96,8 +98,8 @@
                     subview.center = cell.center;
                     [((Piece *)subview) moveToRow:cell.row Column:cell.column];
                 } completion:^(BOOL finished) {
-                    NSInteger rowValue = cell.row;
-                    NSInteger columnValue = cell.column;
+                    rowValue = cell.row;
+                    columnValue = cell.column;
 
                     NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columValue": @(columnValue),
                                                @"oldRow": @(oldRow),@"oldColumn": @(oldColumn)};
@@ -261,8 +263,8 @@
 {
     NSLog(@"ANOTHER USER SEND YOU MESSAGE %@", val);
     NSDictionary *dictValue = [Utils dictByJSONString:val[@"message"]];
-    NSInteger rowValue = [dictValue[@"rowValue"] integerValue];
-    NSInteger columValue = [dictValue[@"columValue"] integerValue];
+    NSInteger rowValue = [dictValue[@"rowValue"] intValue];
+    NSInteger columValue = [dictValue[@"columValue"] intValue];
     NSInteger oldRow = [dictValue[@"oldRow"] intValue];
     NSInteger oldColumn = [dictValue[@"oldColumn"] intValue];
     
