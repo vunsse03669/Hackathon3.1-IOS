@@ -39,6 +39,11 @@
     //[self sendMessage:@"Ahihi123"];
     self.messageIdx = 0;
  
+    if ([self.username integerValue] % 2 == 1) {
+        self.currentColor = PIECE_BLACK;
+    } else {
+        self.currentColor = PIECE_RED;
+    }
 }
 
 - (void) sendMessage:(NSString *)message
@@ -101,12 +106,16 @@
                     NSInteger rowValue = cell.row;
                     BOOL eat = NO;
                     
-                    NSDictionary *dictData = @{@"rowValue": @(rowValue),@"columnValue": @(columnValue),
-                                               @"oldRow": @(oldRow),@"oldColumn": @(oldColumn),@"Eat":@(eat)};
+                    NSDictionary *dictData = @{@"rowValue": @(rowValue),
+                                               @"columnValue": @(columnValue),
+                                               @"oldRow": @(oldRow),
+                                               @"oldColumn": @(oldColumn),
+                                               @"Eat":@(eat),
+                                               @"Color":@(subview.playerColor)};
                     NSString *strData = [Utils stringJSONByDictionary:dictData];
                     
                     [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
-                    
+                    self.lastMovingUser = self.username;
                     
                     if([((Piece *)subview) playerColor] == RED) {
                         [GameObject shareInstance:_vBoard].redPlayer.numberOfTurn ++;
@@ -126,7 +135,20 @@
     }
 }
 
+- (BOOL) isMyTurn
+{
+    if ([self.lastMovingUser intValue] == [self.username intValue]) {
+        return NO;
+    }
+    
+    return YES;
+}
+
 - (void)clickOnPiece:(Piece *)piece {
+    if (![self isMyTurn]) {
+        return;
+    }
+    
     NSLog(@"%ld - %ld",piece.row,piece.column);
     if([self checkEat:piece] && [self getPieceCanMove] != nil) {
         __block NSInteger oldRow = 0;
@@ -144,11 +166,16 @@
             NSInteger columnValue = [self getPieceCanMove].column;
             BOOL eat = YES;
             
-            NSDictionary *dictData = @{@"rowValue": @(rowValue),@"columnValue": @(columnValue),
-                                       @"oldRow": @(oldRow),@"oldColumn": @(oldColumn),@"Eat":@(eat)};
+            NSDictionary *dictData = @{@"rowValue": @(rowValue),
+                                       @"columnValue": @(columnValue),
+                                       @"oldRow": @(oldRow),
+                                       @"oldColumn": @(oldColumn),
+                                       @"Eat":@(eat),
+                                       @"Color":@(piece.playerColor)};
             NSString *strData = [Utils stringJSONByDictionary:dictData];
             
             [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
+            self.lastMovingUser = self.username;
             
             [piece removeFromSuperview];
             for(Cell *cell in self.arrBoard) {
@@ -166,40 +193,23 @@
 
             [Map print];
         }];
-    }else {
-        // turn of redPlayer
-        if([GameObject shareInstance:_vBoard].checkTurn == 1) {
-            for(Cell *cell in self.arrBoard) {
-                if([piece checkMoveWithRow:cell.row Column:cell.column] && piece.playerColor == RED) {
-                    [self setupMoveForPiece:piece];
-                    if(piece.playerColor == BLACK) {
-                        [cell setBackgroundImage:[UIImage imageNamed:EFFECT_BLUE] forState:UIControlStateNormal];
-                    }else {
-                        [cell setBackgroundImage:[UIImage imageNamed:EFFECT_RED] forState:UIControlStateNormal];
-                    }
-                    cell.canMove = YES;
-                } else {
-                    cell.canMove = NO;
+    } else {
+        if (self.currentColor != piece.playerColor) {
+            return;
+        }
+        for(Cell *cell in self.arrBoard) {
+            if([piece checkMoveWithRow:cell.row Column:cell.column]) {
+                [self setupMoveForPiece:piece];
+                if(piece.playerColor == BLACK) {
+                    [cell setBackgroundImage:[UIImage imageNamed:EFFECT_BLUE] forState:UIControlStateNormal];
+                }else {
+                    [cell setBackgroundImage:[UIImage imageNamed:EFFECT_RED] forState:UIControlStateNormal];
                 }
+                cell.canMove = YES;
+            } else {
+                cell.canMove = NO;
             }
         }
-        // turn of blackPlayer
-        if([GameObject shareInstance:_vBoard].checkTurn == 2) {
-            for(Cell *cell in self.arrBoard) {
-                if([piece checkMoveWithRow:cell.row Column:cell.column] && piece.playerColor == BLACK) {
-                    [self setupMoveForPiece:piece];
-                    if(piece.playerColor == BLACK) {
-                        [cell setBackgroundImage:[UIImage imageNamed:EFFECT_BLUE] forState:UIControlStateNormal];
-                    }else {
-                        [cell setBackgroundImage:[UIImage imageNamed:EFFECT_RED] forState:UIControlStateNormal];
-                    }
-                    cell.canMove = YES;
-                } else {
-                    cell.canMove = NO;
-                }
-            }
-        }
-
     }
    
 }
@@ -262,6 +272,10 @@
 
 - (void) handleMessage:(NSDictionary *)val;
 {
+    if ([val[@"owner_id"] intValue] == [self.username intValue]) {
+        return;
+    }
+    
     NSLog(@"ANOTHER USER SEND YOU MESSAGE %@", val);
     NSDictionary *dictValue = [Utils dictByJSONString:val[@"message"]];
     NSInteger rowValue = [dictValue[@"rowValue"] intValue];
@@ -269,6 +283,8 @@
     NSInteger oldRow = [dictValue[@"oldRow"] intValue];
     NSInteger oldColumn = [dictValue[@"oldColumn"] intValue];
     BOOL eat = [dictValue[@"Eat"] boolValue];
+    self.lastMovingUser = dictValue[@"owner_id"];
+    self.lastMovingColor = dictValue[@"Color"];
     
     NSLog(@"Row: %ld - Col: %ld",rowValue,columVal);
     
@@ -276,15 +292,17 @@
         [UIView animateWithDuration:1.0f animations:^{
             [self getPieceAtCell:oldRow :oldColumn].center = [self getCell:rowValue :columVal].center;
         } completion:^(BOOL finished) {
-            [[self getPieceAtCell:rowValue :columVal] removeFromSuperview];
+            
         }];
     }
     else if(eat) {
+        //[[self getPieceAtCell:rowValue :columVal] removeFromSuperview];
+        UIView *v1 = [self getPieceAtCell:oldRow :oldColumn];
+        UIView *v2 = [self getPieceAtCell:rowValue :columVal];
         [UIView animateWithDuration:1.0f animations:^{
-            [self getPieceAtCell:oldRow :oldColumn].center = [self getPieceAtCell:rowValue :columVal].center;
-            
+            v1.center = v2.center;
         } completion:^(BOOL finished) {
-            
+            [v2 removeFromSuperview];
         }];
     }
 }
