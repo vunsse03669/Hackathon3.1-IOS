@@ -43,6 +43,13 @@
         self.currentColor = PIECE_BLACK;
     } else {
         self.currentColor = PIECE_RED;
+        
+        self.vBoard.transform = CGAffineTransformMakeRotation(M_PI);
+        [self.vBoard.layer setAffineTransform:CGAffineTransformMakeScale(1, -1)];
+        for (UIView *piece in _vBoard.subviews) {
+            piece.transform = CGAffineTransformMakeRotation(M_PI);
+            [piece.layer setAffineTransform:CGAffineTransformMakeScale(1, -1)];
+        }
     }
 }
 
