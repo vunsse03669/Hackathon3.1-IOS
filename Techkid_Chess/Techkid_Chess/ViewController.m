@@ -101,7 +101,7 @@
                     rowValue = cell.row;
                     columnValue = cell.column;
 
-                    NSDictionary *dictData = @{@"rowValue": @(rowValue),    @"columValue": @(columnValue),
+                    NSDictionary *dictData = @{@"rowValue": @(rowValue),    @"columnValue": @(columnValue),
                                                @"oldRow": @(oldRow),    @"oldColumn": @(oldColumn)};
                     NSString *strData = [Utils stringJSONByDictionary:dictData];
                     
@@ -143,7 +143,7 @@
             NSInteger rowValue = [self getPieceCanMove].row;
             NSInteger columnValue = [self getPieceCanMove].column;
             
-            NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columValue": @(columnValue),
+            NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columnValue": @(columnValue),
                                        @"oldRow": @(oldRow),@"oldColumn": @(oldColumn)};
             NSString *strData = [Utils stringJSONByDictionary:dictData];
             
@@ -281,7 +281,7 @@
 
 - (Piece *) getPieceAtCell:(NSInteger)row :(NSInteger)column {
     for(Piece *piece in self.vBoard.subviews) {
-        if([piece isKindOfClass:[Piece class]]) {
+        if([piece isKindOfClass:[Piece class]]  && piece.row == row && piece.column == column) {
             return piece;
         }
     }
@@ -291,7 +291,7 @@
 
 - (Cell *) getCell:(NSInteger)row :(NSInteger)column {
     for(Cell *piece in self.vBoard.subviews) {
-        if([piece isKindOfClass:[Cell class]]) {
+        if([piece isKindOfClass:[Cell class]] && piece.row == row && piece.column == column) {
             return piece;
         }
     }
