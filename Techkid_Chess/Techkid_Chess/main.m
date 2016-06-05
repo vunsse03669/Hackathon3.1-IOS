@@ -1,9 +1,9 @@
 //
 //  main.m
-//  Techkid_Chess
+//  Hackathon2
 //
-//  Created by Ta Hoang Minh on 5/28/16.
-//  Copyright © 2016 TechKid. All rights reserved.
+//  Created by Mr.Vu on 6/3/16.
+//  Copyright © 2016 Mr.Vu. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

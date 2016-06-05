@@ -1,19 +1,19 @@
 //
 //  ViewController.h
-//  Techkid_Chess
+//  Hackathon2
 //
-//  Created by Ta Hoang Minh on 5/28/16.
-//  Copyright © 2016 TechKid. All rights reserved.
+//  Created by Mr.Vu on 6/3/16.
+//  Copyright © 2016 Mr.Vu. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "ChooseGameViewController.h"
-@interface ViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UIButton *btnLogin;
-- (IBAction)btnLoginTouchUpInside:(id)sender;
-@property ChooseGameViewController *chooseVC;
-@property (weak, nonatomic) IBOutlet UITextField *txtUsername;
-@property (weak, nonatomic) IBOutlet UITextField *txtPassword;
+#import "GameObject.h"
+
+@interface ViewController : UIViewController <UIAlertViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UIView *vBoard;
+@property GameObject *game;
+@property NSMutableArray *arrBoard;
 
 @end
 

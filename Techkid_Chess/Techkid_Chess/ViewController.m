@@ -1,13 +1,20 @@
 //
 //  ViewController.m
-//  Techkid_Chess
+//  Hackathon2
 //
-//  Created by Ta Hoang Minh on 5/28/16.
-//  Copyright © 2016 TechKid. All rights reserved.
+//  Created by Mr.Vu on 6/3/16.
+//  Copyright © 2016 Mr.Vu. All rights reserved.
 //
 
 #import "ViewController.h"
-#import "ChatRoomViewController.h"
+#import "Cell.h"
+#import "Piece.h"
+#import "Map.h"
+#import "BoardConfig.h"
+#import "King.h"
+
+
+
 @interface ViewController ()
 
 @end
@@ -16,82 +23,186 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    
-    [self customNavigation];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyBoardWhenTap:)];
-    [self.view addGestureRecognizer:tap];
-    tap.cancelsTouchesInView = NO;
+    [GameObject shareInstance:self.vBoard];
+    self.arrBoard = [[NSMutableArray alloc]init];
+    [self initBoard];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-    
+
+#pragma mark - init board
+
+- (void)initBoard {
+    for(UIView *subview in self.vBoard.subviews) {
+        
+        if([subview isKindOfClass:[Cell class] ]) {
+            [self caculateOrigiForCell:(Cell *)subview];
+            [self.arrBoard addObject:subview];
+            [((UIButton *)subview) addTarget:self action:@selector(clickOnCell: :) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        if([subview isKindOfClass:[Piece class]]) {
+            [self caculateOrigiForPiece:(Piece *)subview];
+            [((UIButton *)subview) addTarget:self action:@selector(clickOnPiece:) forControlEvents:UIControlEventTouchUpInside];
+        }
+    }
+    [Map print];
 }
 
-- (void) chooseGame {
-    if (_txtUsername.text.length == 0) {
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"ERROR" message:@"Please input Username" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        NSLog(@"2");
+- (void)caculateOrigiForCell:(Cell *)cell {
+    cell.row = cell.frame.origin.y/CELL_FRAME;
+    cell.column = cell.frame.origin.x/CELL_FRAME;
+}
+
+- (void)caculateOrigiForPiece:(Piece *)piece {
+    piece.row = piece.frame.origin.y/CELL_FRAME;
+    piece.column = piece.frame.origin.x/CELL_FRAME;
+}
+
+#pragma mark - logic
+
+- (void)clickOnCell:(Cell *)cell :(Piece *)piece{
+    
+    if(cell.canMove) {
+        
+        for(UIView *subview in self.vBoard.subviews){
+            if([subview isKindOfClass:[Piece class]] && ((Piece *)subview).canMove) {
+                [UIView animateWithDuration:1.0f animations:^{
+                    subview.center = cell.center;
+                    [((Piece *)subview) moveToRow:cell.row Column:cell.column];
+                } completion:^(BOOL finished) {
+                    if([((Piece *)subview) playerColor] == RED) {
+                        [GameObject shareInstance:_vBoard].redPlayer.numberOfTurn ++;
+                    }
+                    if([((Piece *)subview) playerColor] == BLACK) {
+                        [GameObject shareInstance:_vBoard].blackPlayer.numberOfTurn ++;
+                    }
+                    ((Piece *)subview).canMove = NO;
+                    [Map print];
+                    for(Cell *cell in self.arrBoard) {
+                       [cell setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+                    }
+                }];
+            }
+
+        }
+    }
+}
+
+- (void)clickOnPiece:(Piece *)piece {
+    if([self checkEat:piece] && [self getPieceCanMove] != nil) {
+        [UIView animateWithDuration:1.0f animations:^{
+            [[self getPieceCanMove] moveToRow:piece.row Column:piece.column];
+            [self getPieceCanMove].center = piece.center;
+        } completion:^(BOOL finished) {
+            //[piece removePieceFromBoard];
+            [piece removeFromSuperview];
+            for(Cell *cell in self.arrBoard) {
+                [cell setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+            }
+            if([[self getPieceCanMove] playerColor] == RED) {
+                [GameObject shareInstance:_vBoard].redPlayer.numberOfTurn ++;
+            }
+            if([[self getPieceCanMove] playerColor] == BLACK) {
+                [GameObject shareInstance:_vBoard].blackPlayer.numberOfTurn ++;
+            }
+            
+            [self getPieceCanMove].canMove = NO;
+            [self checkGameOver];
+
+            [Map print];
+        }];
+    }else {
+        // turn of redPlayer
+        if([GameObject shareInstance:_vBoard].checkTurn == 1) {
+            for(Cell *cell in self.arrBoard) {
+                if([piece checkMoveWithRow:cell.row Column:cell.column] && piece.playerColor == RED) {
+                    [self setupMoveForPiece:piece];
+                    if(piece.playerColor == BLACK) {
+                        [cell setBackgroundImage:[UIImage imageNamed:EFFECT_BLUE] forState:UIControlStateNormal];
+                    }else {
+                        [cell setBackgroundImage:[UIImage imageNamed:EFFECT_RED] forState:UIControlStateNormal];
+                    }
+                    cell.canMove = YES;
+                } else {
+                    cell.canMove = NO;
+                }
+            }
+        }
+        // turn of blackPlayer
+        if([GameObject shareInstance:_vBoard].checkTurn == 2) {
+            for(Cell *cell in self.arrBoard) {
+                if([piece checkMoveWithRow:cell.row Column:cell.column] && piece.playerColor == BLACK) {
+                    [self setupMoveForPiece:piece];
+                    if(piece.playerColor == BLACK) {
+                        [cell setBackgroundImage:[UIImage imageNamed:EFFECT_BLUE] forState:UIControlStateNormal];
+                    }else {
+                        [cell setBackgroundImage:[UIImage imageNamed:EFFECT_RED] forState:UIControlStateNormal];
+                    }
+                    cell.canMove = YES;
+                } else {
+                    cell.canMove = NO;
+                }
+            }
+        }
+
+    }
+   
+}
+
+- (void)setupMoveForPiece:(Piece *)piece {
+    piece.canMove = YES;
+    for(Piece *view in self.vBoard.subviews) {
+        if([view isKindOfClass:[Piece class]] && (Piece *)view != piece) {
+            ((Piece *)view).canMove = NO;
+        }
+    }
+}
+
+- (BOOL)checkEat:(Piece *)piece {
+    
+    for(Cell *cell in self.vBoard.subviews) {
+        if([cell isKindOfClass:[Cell class]] && cell.canMove) {
+            if(piece.row == cell.row && piece.column == cell.column){
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+- (Piece *)getPieceCanMove {
+    for(Piece *piece in self.vBoard.subviews) {
+        if([piece isKindOfClass:[Piece class]] && piece.canMove) {
+            return piece;
+        }
+    }
+    return nil;
+}
+
+- (void)checkGameOver {
+    int i = 0;
+    for(Piece *piece in self.vBoard.subviews) {
+        if([piece isKindOfClass:[King class]]) {
+            i ++;
+        }
+    }
+    if(i == 1) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Game Over" message:@"Do you want to continue" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: @"Continued", nil];
         [alert show];
-    } else {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        _chooseVC = [storyboard instantiateViewControllerWithIdentifier:@"ChooseGameID"];
-        _chooseVC.username = _txtUsername.text;
-        [self.navigationController pushViewController:_chooseVC animated:YES];
-    }
-    
-}
-
-- (void) customNavigation {
-    //---------------------------------------------------------
-    //change back button icon
-    self.navigationController.navigationBar.backIndicatorImage = [UIImage imageNamed:@"back"];
-    self.navigationController.navigationBar.backIndicatorTransitionMaskImage = [UIImage imageNamed:@"back"];
-    
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
-    //---------------------------------------------------------
-    //set color for navigation bar
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:3.0f/255.0f green:155.0f/255.0f blue:229.0f/255.0f alpha:1.0f];
-    
-    //---------------------------------------------------------
-    //set title for back button
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    
-    //---------------------------------------------------------
-    //set first title
-    self.navigationItem.title = @"Login";
-    [self.navigationController.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"ChalkboardSE-Bold" size:23], NSFontAttributeName, nil]];
-    
-    //---------------------------------------------------------
-    //change style of StatusBar
-    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
-}
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
-- (IBAction) dismissKeyBoardWhenTap:(id)sender{
-    if ([_txtUsername isKindOfClass:[UITextField class]] && [_txtUsername isFirstResponder]) {
-        [_txtUsername resignFirstResponder];
-    }
-    
-    if ([_txtPassword isKindOfClass:[UITextField class]] && [_txtPassword isFirstResponder]) {
-        [_txtPassword resignFirstResponder];
     }
 }
 
-- (IBAction)btnLoginTouchUpInside:(id)sender {
-    [self chooseGame];
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(buttonIndex == 0) {
+        NSLog(@"index = 0");
+    }
+    else if(buttonIndex == 1) {
+        NSLog(@"index = 1");
+    }
 }
+
 
 @end
