@@ -11,8 +11,8 @@
 
 
 typedef enum PlayerColor {
-    RED,
-    BLACK
+    RED = 1,
+    BLACK = 2
 } PlayerColor;
 
 #endif /* PlayerColor_h */

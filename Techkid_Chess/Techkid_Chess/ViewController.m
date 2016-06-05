@@ -39,10 +39,10 @@
     //[self sendMessage:@"Ahihi123"];
     self.messageIdx = 0;
  
-    if ([self.username integerValue] % 2 == 0) {
-        self.currentColor = BLACK;
+    if ([self.username integerValue] % 2 == 1) {
+        self.currentColor = PIECE_BLACK;
     } else {
-        self.currentColor = RED;
+        self.currentColor = PIECE_RED;
     }
 }
 
