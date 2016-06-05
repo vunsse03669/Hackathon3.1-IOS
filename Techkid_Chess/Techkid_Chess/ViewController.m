@@ -93,6 +93,15 @@
                     subview.center = cell.center;
                     [((Piece *)subview) moveToRow:cell.row Column:cell.column];
                 } completion:^(BOOL finished) {
+                    NSInteger rowValue = cell.row;
+                    NSInteger columnValue = cell.column;
+
+                    NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columValue": @(columnValue)};
+                    NSString *strData = [Utils stringJSONByDictionary:dictData];
+                    
+                    [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
+                    
+                    
                     if([((Piece *)subview) playerColor] == RED) {
                         [GameObject shareInstance:_vBoard].redPlayer.numberOfTurn ++;
                     }
@@ -232,8 +241,8 @@
 {
     NSLog(@"ANOTHER USER SEND YOU MESSAGE %@", val);
     NSDictionary *dictValue = [Utils dictByJSONString:val[@"message"]];
-    int rowValue = [dictValue[@"rowValue"] intValue];
-    int columValue = [dictValue[@"columValue"] intValue];
+//    int rowValue = [dictValue[@"rowValue"] intValue];
+//    int columValue = [dictValue[@"columValue"] intValue];
   
     //NSLog(@"row: %d - column: %d",rowValue,columValue);
     
