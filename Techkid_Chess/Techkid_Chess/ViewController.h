@@ -18,6 +18,7 @@
 @property NSString *username;
 
 @property NSString *lastMovingUser;
+@property NSString *lastMovingColor;
 
 @end
 

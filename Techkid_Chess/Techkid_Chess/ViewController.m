@@ -101,8 +101,12 @@
                     NSInteger rowValue = cell.row;
                     BOOL eat = NO;
                     
-                    NSDictionary *dictData = @{@"rowValue": @(rowValue),@"columnValue": @(columnValue),
-                                               @"oldRow": @(oldRow),@"oldColumn": @(oldColumn),@"Eat":@(eat)};
+                    NSDictionary *dictData = @{@"rowValue": @(rowValue),
+                                               @"columnValue": @(columnValue),
+                                               @"oldRow": @(oldRow),
+                                               @"oldColumn": @(oldColumn),
+                                               @"Eat":@(eat),
+                                               @"Color":@(subview.playerColor)};
                     NSString *strData = [Utils stringJSONByDictionary:dictData];
                     
                     [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
@@ -139,6 +143,7 @@
     if (![self isMyTurn]) {
         return;
     }
+    
     NSLog(@"%ld - %ld",piece.row,piece.column);
     if([self checkEat:piece] && [self getPieceCanMove] != nil) {
         __block NSInteger oldRow = 0;
@@ -156,8 +161,12 @@
             NSInteger columnValue = [self getPieceCanMove].column;
             BOOL eat = YES;
             
-            NSDictionary *dictData = @{@"rowValue": @(rowValue),@"columnValue": @(columnValue),
-                                       @"oldRow": @(oldRow),@"oldColumn": @(oldColumn),@"Eat":@(eat)};
+            NSDictionary *dictData = @{@"rowValue": @(rowValue),
+                                       @"columnValue": @(columnValue),
+                                       @"oldRow": @(oldRow),
+                                       @"oldColumn": @(oldColumn),
+                                       @"Eat":@(eat),
+                                       @"Color":@(piece.playerColor)};
             NSString *strData = [Utils stringJSONByDictionary:dictData];
             
             [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
@@ -180,8 +189,10 @@
             [Map print];
         }];
     }else {
-        // turn of redPlayer
-        // minh1
+        if (piece.playerColor == [self.lastMovingColor intValue]) {
+            return;
+        }
+        
         for(Cell *cell in self.arrBoard) {
             if([piece checkMoveWithRow:cell.row Column:cell.column]) {
                 [self setupMoveForPiece:piece];
@@ -269,6 +280,8 @@
     NSInteger oldColumn = [dictValue[@"oldColumn"] intValue];
     BOOL eat = [dictValue[@"Eat"] boolValue];
     self.lastMovingUser = dictValue[@"owner_id"];
+    self.lastMovingColor = dictValue[@"Color"];
+    
     NSLog(@"Row: %ld - Col: %ld",rowValue,columVal);
     
     if(!eat) {
