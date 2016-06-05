@@ -36,7 +36,7 @@
     self.socketRoom = [[ChatRoomViewController alloc] initWithUserName:self.username room:@"co_tuong_01"];
     [self.socketRoom startSocket];
     self.socketRoom.delegate = self;
-    [self sendMessage:@"Ahihi123"];
+    //[self sendMessage:@"Ahihi123"];
     self.messageIdx = 0;
  
 }
@@ -47,7 +47,7 @@
         if (self.socketRoom.roomReady) {
             [self.socketRoom.socket emit:@"message" withItems:@[message, self.socketRoom.roomName, self.socketRoom.userName]];
         }
-        [self sendMessage:[NSString stringWithFormat:@"message %d", self.messageIdx++]];
+        //[self sendMessage:[NSString stringWithFormat:@"message %d", self.messageIdx++]];
     });
 }
 
@@ -96,8 +96,8 @@
                     subview.center = cell.center;
                     [((Piece *)subview) moveToRow:cell.row Column:cell.column];
                 } completion:^(BOOL finished) {
-                    NSInteger rowValue = 4;
-                    NSInteger columnValue = 4;
+                    NSInteger rowValue = cell.row;
+                    NSInteger columnValue = cell.column;
 
                     NSDictionary *dictData = @{@"rowValue": @(rowValue),    @"columValue": @(columnValue),
                                                @"oldRow": @(oldRow),    @"oldColumn": @(oldColumn)};
@@ -266,16 +266,11 @@
     NSInteger oldRow = [dictValue[@"oldRow"] intValue];
     NSInteger oldColumn = [dictValue[@"oldColumn"] intValue];
     
-    //NSLog(@"%ld %ld",rowValue,columValue);
+    NSLog(@"Row: %ld - Col: %ld",rowValue,columValue);
     
     if([self getPieceAtCell:oldRow :oldColumn] != nil && [self getCell:rowValue :columValue] != nil ) {
         [UIView animateWithDuration:1.0f animations:^{
-<<<<<<< HEAD
-            [self getPieceAtCell:oldRow :oldColumn].center = [self getPieceAtCell:rowValue :columValue].center;
-            
-=======
             [self getPieceAtCell:oldRow :oldColumn].center = [self getCell:rowValue :columValue].center;
->>>>>>> a5e914806e803fb3b598405200ed7dfffff04bfe
         } completion:^(BOOL finished) {
             
         }];
