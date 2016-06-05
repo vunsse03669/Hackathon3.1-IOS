@@ -138,6 +138,7 @@
             [[self getPieceCanMove] moveToRow:piece.row Column:piece.column];
             [self getPieceCanMove].center = piece.center;
         } completion:^(BOOL finished) {
+            //[piece removePieceFromBoard];
             
             NSInteger rowValue = [self getPieceCanMove].row;
             NSInteger columnValue = [self getPieceCanMove].column;
@@ -281,6 +282,7 @@
     else if(eat) {
         [UIView animateWithDuration:1.0f animations:^{
             [self getPieceAtCell:oldRow :oldColumn].center = [self getPieceAtCell:rowValue :columVal].center;
+//            [[self getPieceAtCell:rowValue :columVal] removeFromSuperview];
         } completion:^(BOOL finished) {
             
         }];
