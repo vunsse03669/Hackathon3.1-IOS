@@ -16,5 +16,8 @@
 @property NSMutableArray *arrBoard;
 
 @property NSString *username;
+
+@property NSString *lastMovingUser;
+
 @end
 
