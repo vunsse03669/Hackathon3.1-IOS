@@ -38,6 +38,12 @@
 		46E5C0A21CF9A7AD002A7887 /* SocketTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E5C06B1CF9A7AD002A7887 /* SocketTypes.swift */; };
 		46E5C0A31CF9A7AD002A7887 /* SwiftRegex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E5C06C1CF9A7AD002A7887 /* SwiftRegex.swift */; };
 		46E5C0A41CF9A7AD002A7887 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E5C06D1CF9A7AD002A7887 /* WebSocket.swift */; };
+		84E471791D03D7FF00857F4B /* StartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E471781D03D7FF00857F4B /* StartViewController.m */; };
+		84E4717C1D03D87800857F4B /* Logo.Png in Resources */ = {isa = PBXBuildFile; fileRef = 84E4717B1D03D87800857F4B /* Logo.Png */; };
+		84E4717E1D03D88300857F4B /* GoIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E4717D1D03D88300857F4B /* GoIcon.png */; };
+		84E471801D03D88D00857F4B /* ChineseChessIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E4717F1D03D88D00857F4B /* ChineseChessIcon.png */; };
+		84E471821D03D89300857F4B /* ChessIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E471811D03D89300857F4B /* ChessIcon.png */; };
+		84E471881D03DBD100857F4B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E471871D03DBD100857F4B /* LoginViewController.m */; };
 		99BC919D1D03D4D800E56FC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99BC919B1D03D4D800E56FC5 /* Main.storyboard */; };
 		99BC91A01D03D51A00E56FC5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99BC919F1D03D51A00E56FC5 /* ViewController.m */; };
 		99BC91A61D03D56B00E56FC5 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 99BC91A51D03D56B00E56FC5 /* Player.m */; };
@@ -119,6 +125,14 @@
 		46E5C06B1CF9A7AD002A7887 /* SocketTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketTypes.swift; sourceTree = "<group>"; };
 		46E5C06C1CF9A7AD002A7887 /* SwiftRegex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftRegex.swift; sourceTree = "<group>"; };
 		46E5C06D1CF9A7AD002A7887 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
+		84E471771D03D7FF00857F4B /* StartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartViewController.h; sourceTree = "<group>"; };
+		84E471781D03D7FF00857F4B /* StartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartViewController.m; sourceTree = "<group>"; };
+		84E4717B1D03D87800857F4B /* Logo.Png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Logo.Png; sourceTree = "<group>"; };
+		84E4717D1D03D88300857F4B /* GoIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GoIcon.png; sourceTree = "<group>"; };
+		84E4717F1D03D88D00857F4B /* ChineseChessIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChineseChessIcon.png; sourceTree = "<group>"; };
+		84E471811D03D89300857F4B /* ChessIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ChessIcon.png; sourceTree = "<group>"; };
+		84E471861D03DBD100857F4B /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		84E471871D03DBD100857F4B /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		99BC919C1D03D4D800E56FC5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		99BC919E1D03D51A00E56FC5 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		99BC919F1D03D51A00E56FC5 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -289,6 +303,17 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
+		84E4717A1D03D86E00857F4B /* Icon */ = {
+			isa = PBXGroup;
+			children = (
+				84E471811D03D89300857F4B /* ChessIcon.png */,
+				84E4717F1D03D88D00857F4B /* ChineseChessIcon.png */,
+				84E4717D1D03D88300857F4B /* GoIcon.png */,
+				84E4717B1D03D87800857F4B /* Logo.Png */,
+			);
+			name = Icon;
+			sourceTree = "<group>";
+		};
 		99BC91951D03D2EB00E56FC5 /* ChineseChess */ = {
 			isa = PBXGroup;
 			children = (
@@ -306,6 +331,10 @@
 			children = (
 				99BC919E1D03D51A00E56FC5 /* ViewController.h */,
 				99BC919F1D03D51A00E56FC5 /* ViewController.m */,
+				84E471771D03D7FF00857F4B /* StartViewController.h */,
+				84E471781D03D7FF00857F4B /* StartViewController.m */,
+				84E471861D03DBD100857F4B /* LoginViewController.h */,
+				84E471871D03DBD100857F4B /* LoginViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -343,6 +372,7 @@
 		99BC919A1D03D44D00E56FC5 /* Asset */ = {
 			isa = PBXGroup;
 			children = (
+				84E4717A1D03D86E00857F4B /* Icon */,
 				99BC91CB1D03D68400E56FC5 /* GUIBoard */,
 			);
 			name = Asset;
@@ -483,6 +513,8 @@
 				99BC91F01D03D68400E56FC5 /* effBlueJustMove.png in Resources */,
 				99BC91F71D03D68400E56FC5 /* redChariot.png in Resources */,
 				99BC91F91D03D68400E56FC5 /* redHorse.png in Resources */,
+				84E4717E1D03D88300857F4B /* GoIcon.png in Resources */,
+				84E4717C1D03D87800857F4B /* Logo.Png in Resources */,
 				99BC91E91D03D68400E56FC5 /* blueHorse.png in Resources */,
 				99BC91F81D03D68400E56FC5 /* redElephant.png in Resources */,
 				99BC919D1D03D4D800E56FC5 /* Main.storyboard in Resources */,
@@ -499,6 +531,7 @@
 				99BC91E51D03D68400E56FC5 /* blueAdvisor.png in Resources */,
 				99BC91F41D03D68400E56FC5 /* effRedJustMove.png in Resources */,
 				99BC91FB1D03D68400E56FC5 /* redPreviousPoint.png in Resources */,
+				84E471801D03D88D00857F4B /* ChineseChessIcon.png in Resources */,
 				99BC91F31D03D68400E56FC5 /* effectSuggest.png in Resources */,
 				99BC91F21D03D68400E56FC5 /* effectSelect.png in Resources */,
 				99BC91ED1D03D68400E56FC5 /* board.png in Resources */,
@@ -507,6 +540,7 @@
 				99BC91E61D03D68400E56FC5 /* blueCannon.png in Resources */,
 				99BC91F11D03D68400E56FC5 /* effectChieuTuong.png in Resources */,
 				99BC91FA1D03D68400E56FC5 /* redKing.png in Resources */,
+				84E471821D03D89300857F4B /* ChessIcon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,7 +569,9 @@
 				46E5C09E1CF9A7AD002A7887 /* SocketLogger.swift in Sources */,
 				46E5C09B1CF9A7AD002A7887 /* SocketIOClient.swift in Sources */,
 				46E5C09F1CF9A7AD002A7887 /* SocketPacket.swift in Sources */,
+				84E471791D03D7FF00857F4B /* StartViewController.m in Sources */,
 				46E5C09A1CF9A7AD002A7887 /* SocketEventHandler.swift in Sources */,
+				84E471881D03DBD100857F4B /* LoginViewController.m in Sources */,
 				46E5C0921CF9A7AD002A7887 /* SocketAnyEvent.swift in Sources */,
 				46E5C0121CF9A796002A7887 /* AppDelegate.m in Sources */,
 				46E5C0991CF9A7AD002A7887 /* SocketEngineWebsocket.swift in Sources */,
