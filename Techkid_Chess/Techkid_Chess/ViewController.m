@@ -47,7 +47,7 @@
         if (self.socketRoom.roomReady) {
             [self.socketRoom.socket emit:@"message" withItems:@[message, self.socketRoom.roomName, self.socketRoom.userName]];
         }
-        [self sendMessage:[NSString stringWithFormat:@"message %d", self.messageIdx++]];
+        //[self sendMessage:[NSString stringWithFormat:@"message %d", self.messageIdx++]];
     });
 }
 
