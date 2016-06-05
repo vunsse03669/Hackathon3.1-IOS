@@ -146,6 +146,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="boardBG.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="VJc-Mn-SZB">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="board.png" translatesAutoresizingMaskIntoConstraints="NO" id="1an-JV-MiH">
                                 <rect key="frame" x="120" y="100" width="360" height="400"/>
                                 <constraints>
@@ -976,10 +979,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="VJc-Mn-SZB" secondAttribute="bottom" id="A0t-iO-cbu"/>
                             <constraint firstItem="1an-JV-MiH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="CgG-Wn-Ddz"/>
                             <constraint firstItem="XID-Jd-fmX" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="FaF-pm-pUw"/>
+                            <constraint firstAttribute="trailing" secondItem="VJc-Mn-SZB" secondAttribute="trailing" id="Ogr-su-lNr"/>
+                            <constraint firstItem="VJc-Mn-SZB" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Raa-un-T49"/>
                             <constraint firstItem="1an-JV-MiH" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="aE7-hf-NtT"/>
                             <constraint firstItem="XID-Jd-fmX" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="cP4-rw-raJ"/>
+                            <constraint firstItem="VJc-Mn-SZB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ubV-gN-mvl"/>
                         </constraints>
                     </view>
                     <connections>
@@ -994,5 +1001,6 @@
     <resources>
         <image name="Logo.Png" width="360" height="216"/>
         <image name="board.png" width="481" height="532"/>
+        <image name="boardBG.jpg" width="800" height="480"/>
     </resources>
 </document>
