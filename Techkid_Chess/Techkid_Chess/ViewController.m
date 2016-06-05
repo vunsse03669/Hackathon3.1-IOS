@@ -47,7 +47,7 @@
         if (self.socketRoom.roomReady) {
             [self.socketRoom.socket emit:@"message" withItems:@[message, self.socketRoom.roomName, self.socketRoom.userName]];
         }
-        //[self sendMessage:[NSString stringWithFormat:@"message %d", self.messageIdx++]];
+        [self sendMessage:[NSString stringWithFormat:@"message %d", self.messageIdx++]];
     });
 }
 
@@ -127,7 +127,11 @@
 - (void)clickOnPiece:(Piece *)piece {
     NSLog(@"%ld - %ld",piece.row,piece.column);
     if([self checkEat:piece] && [self getPieceCanMove] != nil) {
+        __block NSInteger oldRow = 0;
+        __block NSInteger oldColumn = 0;
         [UIView animateWithDuration:1.0f animations:^{
+            oldRow = [self getPieceCanMove].row;
+            oldColumn = [self getPieceCanMove].column;
             [[self getPieceCanMove] moveToRow:piece.row Column:piece.column];
             [self getPieceCanMove].center = piece.center;
         } completion:^(BOOL finished) {
@@ -136,7 +140,8 @@
             NSInteger rowValue = [self getPieceCanMove].row;
             NSInteger columnValue = [self getPieceCanMove].column;
             
-            NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columValue": @(columnValue)};
+            NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columValue": @(columnValue),
+                                       @"oldRow": @(oldRow),@"oldColumn": @(oldColumn)};
             NSString *strData = [Utils stringJSONByDictionary:dictData];
             
             [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
@@ -255,10 +260,12 @@
 {
     NSLog(@"ANOTHER USER SEND YOU MESSAGE %@", val);
     NSDictionary *dictValue = [Utils dictByJSONString:val[@"message"]];
-    int rowValue = [dictValue[@"rowValue"] intValue];
-    int columValue = [dictValue[@"columValue"] intValue];
-    int oldRow = [dictValue[@"oldRow"] intValue];
-    int oldColumn = [dictValue[@"oldColumn"] intValue];
+    NSInteger rowValue = [dictValue[@"rowValue"] intValue];
+    NSInteger columValue = [dictValue[@"columValue"] intValue];
+    NSInteger oldRow = [dictValue[@"oldRow"] intValue];
+    NSInteger oldColumn = [dictValue[@"oldColumn"] intValue];
+    
+    NSLog(@"%ld %ld",rowValue,columValue);
     
     if([self getPieceAtCell:oldRow :oldColumn] != nil) {
         [UIView animateWithDuration:1.0f animations:^{
