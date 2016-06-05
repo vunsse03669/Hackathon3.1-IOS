@@ -84,19 +84,23 @@
 #pragma mark - logic
 
 - (void)clickOnCell:(Cell *)cell :(Piece *)piece{
-    
     if(cell.canMove) {
         
-        for(UIView *subview in self.vBoard.subviews){
+        __block NSInteger oldRow = 0;
+        __block NSInteger oldColumn = 0;
+        for(Piece *subview in self.vBoard.subviews){
             if([subview isKindOfClass:[Piece class]] && ((Piece *)subview).canMove) {
                 [UIView animateWithDuration:1.0f animations:^{
+                    oldRow = subview.row;
+                    oldColumn = subview.column;
                     subview.center = cell.center;
                     [((Piece *)subview) moveToRow:cell.row Column:cell.column];
                 } completion:^(BOOL finished) {
                     NSInteger rowValue = cell.row;
                     NSInteger columnValue = cell.column;
 
-                    NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columValue": @(columnValue)};
+                    NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columValue": @(columnValue),
+                                               @"oldRow": @(oldRow),@"oldColumn": @(oldColumn)};
                     NSString *strData = [Utils stringJSONByDictionary:dictData];
                     
                     [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
@@ -121,12 +125,22 @@
 }
 
 - (void)clickOnPiece:(Piece *)piece {
+    NSLog(@"%ld - %ld",piece.row,piece.column);
     if([self checkEat:piece] && [self getPieceCanMove] != nil) {
         [UIView animateWithDuration:1.0f animations:^{
             [[self getPieceCanMove] moveToRow:piece.row Column:piece.column];
             [self getPieceCanMove].center = piece.center;
         } completion:^(BOOL finished) {
             //[piece removePieceFromBoard];
+            
+            NSInteger rowValue = [self getPieceCanMove].row;
+            NSInteger columnValue = [self getPieceCanMove].column;
+            
+            NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columValue": @(columnValue)};
+            NSString *strData = [Utils stringJSONByDictionary:dictData];
+            
+            [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
+            
             [piece removeFromSuperview];
             for(Cell *cell in self.arrBoard) {
                 [cell setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
@@ -241,12 +255,28 @@
 {
     NSLog(@"ANOTHER USER SEND YOU MESSAGE %@", val);
     NSDictionary *dictValue = [Utils dictByJSONString:val[@"message"]];
-//    int rowValue = [dictValue[@"rowValue"] intValue];
-//    int columValue = [dictValue[@"columValue"] intValue];
-  
-    //NSLog(@"row: %d - column: %d",rowValue,columValue);
+    int rowValue = [dictValue[@"rowValue"] intValue];
+    int columValue = [dictValue[@"columValue"] intValue];
+    int oldRow = [dictValue[@"oldRow"] intValue];
+    int oldColumn = [dictValue[@"oldColumn"] intValue];
     
+    if([self getPieceAtCell:oldRow :oldColumn] != nil) {
+        [UIView animateWithDuration:1.0f animations:^{
+            [self getPieceAtCell:oldRow :oldColumn].center = [self getPieceAtCell:rowValue :columValue].center;
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
+}
+
+- (Piece *) getPieceAtCell:(NSInteger)row :(NSInteger)column {
+    for(Piece *piece in self.vBoard.subviews) {
+        if([piece isKindOfClass:[Piece class]] && piece.row == row && piece.column == column) {
+            return piece;
+        }
+    }
     
+    return nil;
 }
 
 
