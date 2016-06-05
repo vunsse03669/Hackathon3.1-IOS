@@ -262,6 +262,10 @@
 
 - (void) handleMessage:(NSDictionary *)val;
 {
+    if ([val[@"owner_id"] intValue] == [self.username intValue]) {
+        return;
+    }
+    
     NSLog(@"ANOTHER USER SEND YOU MESSAGE %@", val);
     NSDictionary *dictValue = [Utils dictByJSONString:val[@"message"]];
     NSInteger rowValue = [dictValue[@"rowValue"] intValue];
@@ -280,11 +284,13 @@
         }];
     }
     else if(eat) {
+        //[[self getPieceAtCell:rowValue :columVal] removeFromSuperview];
+        UIView *v1 = [self getPieceAtCell:oldRow :oldColumn];
+        UIView *v2 = [self getPieceAtCell:rowValue :columVal];
         [UIView animateWithDuration:1.0f animations:^{
-            [self getPieceAtCell:oldRow :oldColumn].center = [self getPieceAtCell:rowValue :columVal].center;
-//            [[self getPieceAtCell:rowValue :columVal] removeFromSuperview];
+            v1.center = v2.center;
         } completion:^(BOOL finished) {
-            
+            [v2 removeFromSuperview];
         }];
     }
 }
