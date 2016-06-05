@@ -12,7 +12,9 @@
 @implementation Horse
 
 - (BOOL)checkMoveWithRow:(NSInteger)nextRow Column:(NSInteger)nextColumn; {
-    [super checkMoveWithRow:nextRow Column:nextColumn];
+    if (![super checkMoveWithRow:nextRow Column:nextColumn]) {
+        return NO;
+    }
     
     if(labs(nextRow - self.row) == 2 && labs(nextColumn - self.column) == 1) {
         if(([self getCellFromBoard:self.row + 1 Column:self.column] == PIECE_EMPTY && nextRow - self.row > 0)||

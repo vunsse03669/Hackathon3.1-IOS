@@ -12,7 +12,9 @@
 @implementation Cannon
 
 - (BOOL)checkMoveWithRow:(NSInteger)nextRow Column:(NSInteger)nextColumn; {
-    [super checkMoveWithRow:nextRow Column:nextColumn];
+    if (![super checkMoveWithRow:nextRow Column:nextColumn]) {
+        return NO;
+    }
     BOOL canMove = NO;
     
     if([self getCellFromBoard:nextRow Column:nextColumn] != PIECE_EMPTY) {

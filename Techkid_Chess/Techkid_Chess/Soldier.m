@@ -21,7 +21,9 @@
 }
 
 - (BOOL)checkMoveWithRow:(NSInteger)nextRow Column:(NSInteger)nextColumn; {
-    
+    if (![super checkMoveWithRow:nextRow Column:nextColumn]) {
+        return NO;
+    }
     if(self.playerColor == RED && self.row >= 5) {
         self.overRiver = YES;
     }

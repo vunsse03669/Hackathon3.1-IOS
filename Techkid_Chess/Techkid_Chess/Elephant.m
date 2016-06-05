@@ -24,7 +24,9 @@
 }
 
 - (BOOL)checkMoveWithRow:(NSInteger)nextRow Column:(NSInteger)nextColumn; {
-    [super checkMoveWithRow:nextRow Column:nextColumn];
+    if (![super checkMoveWithRow:nextRow Column:nextColumn]) {
+        return NO;
+    }
     if(labs(nextRow - self.row) == 2 && labs(nextColumn - self.column) == 2) {
         if(([self checkBarrierRow:self.row + 1 Column:self.column - 1] && nextRow > self.row && nextColumn < self.column) ||
            ([self checkBarrierRow:self.row + 1 Column:self.column + 1] && nextRow > self.row && nextColumn > self.column) ||

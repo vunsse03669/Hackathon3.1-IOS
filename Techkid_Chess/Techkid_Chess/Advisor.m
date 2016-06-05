@@ -26,7 +26,9 @@
 }
 
 - (BOOL)checkMoveWithRow:(NSInteger)nextRow Column:(NSInteger)nextColumn; {
-    [super checkMoveWithRow:nextRow Column:nextColumn];
+    if (![super checkMoveWithRow:nextRow Column:nextColumn]) {
+        return NO;
+    }
 
     
     if(labs(nextRow -self.row) == 1 && labs(nextColumn - self.column) == 1 && nextColumn >= 3 && nextColumn <= 5 && (nextRow >= 7 || nextRow <= 2)) {

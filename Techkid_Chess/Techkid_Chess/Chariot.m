@@ -12,7 +12,9 @@
 @implementation Chariot
 
 - (BOOL)checkMoveWithRow:(NSInteger)nextRow Column:(NSInteger)nextColumn; {
-    [super checkMoveWithRow:nextRow Column:nextColumn];
+    if (![super checkMoveWithRow:nextRow Column:nextColumn]) {
+        return NO;
+    }
     BOOL canMove = NO;
     if(self.playerColor == RED && [self getCellFromBoard:nextRow Column:nextColumn] == 1) {
         return NO;
