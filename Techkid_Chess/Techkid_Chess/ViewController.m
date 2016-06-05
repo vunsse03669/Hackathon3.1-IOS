@@ -293,14 +293,16 @@
     if(!eat) {
         [UIView animateWithDuration:1.0f animations:^{
             [self getPieceAtCell:oldRow :oldColumn].center = [self getCell:rowValue :columVal].center;
+            [[self getPieceAtCell:oldRow :oldColumn] moveToRow:rowValue Column:columVal];
         } completion:^(BOOL finished) {
             
         }];
     }
     else if(eat) {
         //[[self getPieceAtCell:rowValue :columVal] removeFromSuperview];
-        UIView *v1 = [self getPieceAtCell:oldRow :oldColumn];
+        Piece *v1 = [self getPieceAtCell:oldRow :oldColumn];
         Piece *v2 = [self getPieceAtCell:rowValue :columVal];
+        [v1 moveToRow:rowValue Column:columVal];
         [v2 removePieceFromBoard];
         [UIView animateWithDuration:1.0f animations:^{
             v1.center = v2.center;
