@@ -129,6 +129,7 @@
     if([self checkEat:piece] && [self getPieceCanMove] != nil) {
         __block NSInteger oldRow = 0;
         __block NSInteger oldColumn = 0;
+        
         [UIView animateWithDuration:1.0f animations:^{
             oldRow = [self getPieceCanMove].row;
             oldColumn = [self getPieceCanMove].column;
@@ -260,16 +261,16 @@
 {
     NSLog(@"ANOTHER USER SEND YOU MESSAGE %@", val);
     NSDictionary *dictValue = [Utils dictByJSONString:val[@"message"]];
-    NSInteger rowValue = [dictValue[@"rowValue"] intValue];
-    NSInteger columValue = [dictValue[@"columValue"] intValue];
+    NSInteger rowValue = [dictValue[@"rowValue"] integerValue];
+    NSInteger columValue = [dictValue[@"columValue"] integerValue];
     NSInteger oldRow = [dictValue[@"oldRow"] intValue];
     NSInteger oldColumn = [dictValue[@"oldColumn"] intValue];
     
     NSLog(@"%ld %ld",rowValue,columValue);
     
-    if([self getPieceAtCell:oldRow :oldColumn] != nil) {
+    if([self getPieceAtCell:oldRow :oldColumn] != nil && [self getCell:rowValue :columValue] != nil ) {
         [UIView animateWithDuration:1.0f animations:^{
-            [self getPieceAtCell:oldRow :oldColumn].center = [self getPieceAtCell:rowValue :columValue].center;
+            [self getPieceAtCell:oldRow :oldColumn].center = [self getCell:rowValue :columValue].center;
         } completion:^(BOOL finished) {
             
         }];
@@ -278,7 +279,17 @@
 
 - (Piece *) getPieceAtCell:(NSInteger)row :(NSInteger)column {
     for(Piece *piece in self.vBoard.subviews) {
-        if([piece isKindOfClass:[Piece class]] && piece.row == row && piece.column == column) {
+        if([piece isKindOfClass:[Piece class]]) {
+            return piece;
+        }
+    }
+    
+    return nil;
+}
+
+- (Cell *) getCell:(NSInteger)row :(NSInteger)column {
+    for(Cell *piece in self.vBoard.subviews) {
+        if([piece isKindOfClass:[Cell class]]) {
             return piece;
         }
     }
