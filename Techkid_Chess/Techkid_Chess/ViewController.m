@@ -36,7 +36,7 @@
     self.socketRoom = [[ChatRoomViewController alloc] initWithUserName:self.username room:@"co_tuong_01"];
     [self.socketRoom startSocket];
     self.socketRoom.delegate = self;
-    [self sendMessage:@"Ahihi123"];
+    //[self sendMessage:@"Ahihi123"];
     self.messageIdx = 0;
  
 }
@@ -47,7 +47,7 @@
         if (self.socketRoom.roomReady) {
             [self.socketRoom.socket emit:@"message" withItems:@[message, self.socketRoom.roomName, self.socketRoom.userName]];
         }
-        [self sendMessage:[NSString stringWithFormat:@"message %d", self.messageIdx++]];
+        //[self sendMessage:[NSString stringWithFormat:@"message %d", self.messageIdx++]];
     });
 }
 
@@ -101,8 +101,8 @@
                     rowValue = cell.row;
                     columnValue = cell.column;
 
-                    NSDictionary *dictData = @{@"rowValue": @(rowValue),  @"columValue": @(columnValue),
-                                               @"oldRow": @(oldRow),@"oldColumn": @(oldColumn)};
+                    NSDictionary *dictData = @{@"rowValue": @(rowValue),    @"columValue": @(columnValue),
+                                               @"oldRow": @(oldRow),    @"oldColumn": @(oldColumn)};
                     NSString *strData = [Utils stringJSONByDictionary:dictData];
                     
                     [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
@@ -268,7 +268,7 @@
     NSInteger oldRow = [dictValue[@"oldRow"] intValue];
     NSInteger oldColumn = [dictValue[@"oldColumn"] intValue];
     
-    NSLog(@"%ld %ld",rowValue,columValue);
+    NSLog(@"Row: %ld - Col: %ld",rowValue,columValue);
     
     if([self getPieceAtCell:oldRow :oldColumn] != nil && [self getCell:rowValue :columValue] != nil ) {
         [UIView animateWithDuration:1.0f animations:^{
