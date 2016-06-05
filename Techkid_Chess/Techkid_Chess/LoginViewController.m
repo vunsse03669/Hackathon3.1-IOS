@@ -7,6 +7,7 @@
 //
 
 #import "LoginViewController.h"
+#import "ViewController.h"
 
 @interface LoginViewController ()
 
@@ -37,7 +38,11 @@
 */
 
 - (IBAction)btnLoginClicked:(id)sender {
-    [self performSegueWithIdentifier:@"mainVc" sender:nil];
+    //[self performSegueWithIdentifier:@"mainVc" sender:nil];
+    ViewController *vc = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]]instantiateViewControllerWithIdentifier:@"ViewController"];
+    vc.username = _txtUsername.text;
+    [self presentViewController:vc animated:YES completion:nil];
+    
     
 }
 @end

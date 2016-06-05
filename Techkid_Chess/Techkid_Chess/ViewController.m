@@ -21,6 +21,7 @@
 @property ChatRoomViewController *socketRoom;
 @property int messageIdx;
 
+
 @end
 
 @implementation ViewController
@@ -32,7 +33,7 @@
     [self initBoard];
     
     //init socket
-    self.socketRoom = [[ChatRoomViewController alloc] initWithUserName:@"1" room:@"co_tuong_01"];
+    self.socketRoom = [[ChatRoomViewController alloc] initWithUserName:self.username room:@"co_tuong_01"];
     [self.socketRoom startSocket];
     self.socketRoom.delegate = self;
     [self sendMessage:@"Ahihi123"];
