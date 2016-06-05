@@ -20,5 +20,7 @@
 @property NSString *lastMovingUser;
 @property NSString *lastMovingColor;
 
+@property int currentColor;
+
 @end
 

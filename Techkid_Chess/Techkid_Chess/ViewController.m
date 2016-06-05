@@ -39,6 +39,11 @@
     //[self sendMessage:@"Ahihi123"];
     self.messageIdx = 0;
  
+    if ([self.username integerValue] % 2 == 0) {
+        self.currentColor = BLACK;
+    } else {
+        self.currentColor = RED;
+    }
 }
 
 - (void) sendMessage:(NSString *)message
@@ -188,11 +193,10 @@
 
             [Map print];
         }];
-    }else {
-        if (piece.playerColor == [self.lastMovingColor intValue]) {
+    } else {
+        if (self.currentColor != piece.playerColor) {
             return;
         }
-        
         for(Cell *cell in self.arrBoard) {
             if([piece checkMoveWithRow:cell.row Column:cell.column]) {
                 [self setupMoveForPiece:piece];
