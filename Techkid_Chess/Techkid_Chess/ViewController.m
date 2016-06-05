@@ -150,7 +150,9 @@
     }
     
     NSLog(@"%ld - %ld",piece.row,piece.column);
-    if([self checkEat:piece] && [self getPieceCanMove] != nil) {
+    BOOL canEat = [self checkEat:piece];
+    BOOL canMove = ([self getPieceCanMove] != nil);
+    if(canEat && canMove) {
         __block NSInteger oldRow = 0;
         __block NSInteger oldColumn = 0;
         
@@ -298,7 +300,8 @@
     else if(eat) {
         //[[self getPieceAtCell:rowValue :columVal] removeFromSuperview];
         UIView *v1 = [self getPieceAtCell:oldRow :oldColumn];
-        UIView *v2 = [self getPieceAtCell:rowValue :columVal];
+        Piece *v2 = [self getPieceAtCell:rowValue :columVal];
+        [v2 removePieceFromBoard];
         [UIView animateWithDuration:1.0f animations:^{
             v1.center = v2.center;
         } completion:^(BOOL finished) {
