@@ -101,7 +101,7 @@
                     NSInteger rowValue = cell.row;
                     BOOL eat = NO;
                     
-                    NSDictionary *dictData = @{@"rowValue": @(rowValue),@"columValue": @(columnValue),
+                    NSDictionary *dictData = @{@"rowValue": @(rowValue),@"columnValue": @(columnValue),
                                                @"oldRow": @(oldRow),@"oldColumn": @(oldColumn),@"Eat":@(eat)};
                     NSString *strData = [Utils stringJSONByDictionary:dictData];
                     
@@ -276,13 +276,13 @@
         [UIView animateWithDuration:1.0f animations:^{
             [self getPieceAtCell:oldRow :oldColumn].center = [self getCell:rowValue :columVal].center;
         } completion:^(BOOL finished) {
-            
+            [[self getPieceAtCell:rowValue :columVal] removeFromSuperview];
         }];
     }
     else if(eat) {
         [UIView animateWithDuration:1.0f animations:^{
             [self getPieceAtCell:oldRow :oldColumn].center = [self getPieceAtCell:rowValue :columVal].center;
-            [[self getPieceAtCell:rowValue :columVal] removeFromSuperview];
+            
         } completion:^(BOOL finished) {
             
         }];
