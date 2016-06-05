@@ -265,7 +265,7 @@
     NSInteger oldRow = [dictValue[@"oldRow"] intValue];
     NSInteger oldColumn = [dictValue[@"oldColumn"] intValue];
     
-    NSLog(@"%ld %ld",rowValue,columValue);
+    //NSLog(@"%ld %ld",rowValue,columValue);
     
     if([self getPieceAtCell:oldRow :oldColumn] != nil) {
         [UIView animateWithDuration:1.0f animations:^{
