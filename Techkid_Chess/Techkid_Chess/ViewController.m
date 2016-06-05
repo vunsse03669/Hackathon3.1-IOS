@@ -99,9 +99,10 @@
                 } completion:^(BOOL finished) {
                     NSInteger columnValue = cell.column;
                     NSInteger rowValue = cell.row;
+                    BOOL eat = NO;
                     
                     NSDictionary *dictData = @{@"rowValue": @(rowValue),@"columValue": @(columnValue),
-                                               @"oldRow": @(oldRow),@"oldColumn": @(oldColumn)};
+                                               @"oldRow": @(oldRow),@"oldColumn": @(oldColumn),@"Eat":@(eat)};
                     NSString *strData = [Utils stringJSONByDictionary:dictData];
                     
                     [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
@@ -141,9 +142,10 @@
             
             NSInteger rowValue = [self getPieceCanMove].row;
             NSInteger columnValue = [self getPieceCanMove].column;
+            BOOL eat = YES;
             
             NSDictionary *dictData = @{@"rowValue": @(rowValue),@"columnValue": @(columnValue),
-                                       @"oldRow": @(oldRow),@"oldColumn": @(oldColumn)};
+                                       @"oldRow": @(oldRow),@"oldColumn": @(oldColumn),@"Eat":@(eat)};
             NSString *strData = [Utils stringJSONByDictionary:dictData];
             
             [self.socketRoom.socket emit:@"message" withItems:@[strData, self.socketRoom.roomName, self.socketRoom.userName]];
@@ -266,16 +268,25 @@
     NSInteger columVal = [dictValue[@"columnValue"] intValue];
     NSInteger oldRow = [dictValue[@"oldRow"] intValue];
     NSInteger oldColumn = [dictValue[@"oldColumn"] intValue];
+    BOOL eat = [dictValue[@"Eat"] boolValue];
     
     NSLog(@"Row: %ld - Col: %ld",rowValue,columVal);
     
-    //if([self getPieceAtCell:oldRow :oldColumn] != nil && [self getCell:rowValue :columValue] != nil ) {
+    if(!eat) {
         [UIView animateWithDuration:1.0f animations:^{
             [self getPieceAtCell:oldRow :oldColumn].center = [self getCell:rowValue :columVal].center;
         } completion:^(BOOL finished) {
             
         }];
-    //}
+    }
+    else if(eat) {
+        [UIView animateWithDuration:1.0f animations:^{
+            [self getPieceAtCell:oldRow :oldColumn].center = [self getPieceAtCell:rowValue :columVal].center;
+            [[self getPieceAtCell:rowValue :columVal] removeFromSuperview];
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
 }
 
 - (Piece *) getPieceAtCell:(NSInteger)row :(NSInteger)column {
